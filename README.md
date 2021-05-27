@@ -1,1 +1,3 @@
 # lightweight-human-pose-estimation.OpenCV
+
+We infer the model only use OpenCV, not including other library...
