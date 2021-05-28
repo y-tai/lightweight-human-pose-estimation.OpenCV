@@ -1,4 +1,3 @@
-#pragma once
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn.hpp>
 #include <ctime>
@@ -29,14 +28,14 @@ namespace poseEstimation{
     public:
         poseEstimation(std::string modelPath){
             this->net = cv::dnn::readNetFromONNX(modelPath);
-            net.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
-            net.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
+            this->net.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+            this->net.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
         }
     
         std::vector<Pose> run(const cv::Mat& img, const bool multi_person = false){
-            std::vector<cv::Mat> outs = this->forward(img, true);
-
+            std::vector<cv::Mat> outs = this->forward(img);
             std::vector<Pose> res = this->postProcess(outs);
+            
             return res;
         }
 
@@ -53,10 +52,8 @@ namespace poseEstimation{
             return dst;
         }
     
-        std::vector<cv::Mat> forward(const cv::Mat& img, bool run_preProcess = false){
-            cv::Mat src = img.clone();
-            if(run_preProcess)
-                src = this->preProcess(img);    
+        std::vector<cv::Mat> forward(const cv::Mat& img){
+            cv::Mat src = this->preProcess(img);            
             cv::Mat inputBlob = cv::dnn::blobFromImage(src, 1.0 / 255, cv::Size(this->in_width, this->in_height), cv::Scalar(128,128,128), false, false);
     		this->net.setInput(inputBlob);
 
@@ -66,7 +63,7 @@ namespace poseEstimation{
             return outs;
         }
     
-        std::vector<Pose> postProcess(const std::vector<cv::Mat>& outs, bool multi_person=false){
+        std::vector<Pose> postProcess(const std::vector<cv::Mat>& outs){
 
             cv::Mat heatmaps =outs[0]; //1*19*120*120
             std::vector<cv::Mat> heatmaps_channels(heatmaps.size[1] - 1);
