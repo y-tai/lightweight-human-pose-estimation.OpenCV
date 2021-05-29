@@ -65,7 +65,7 @@ namespace poseEstimation{
     
         std::vector<Pose> postProcess(const std::vector<cv::Mat>& outs){
 
-            cv::Mat heatmaps =outs[0]; //1*19*120*120
+            cv::Mat heatmaps =outs[0];
             std::vector<cv::Mat> heatmaps_channels(heatmaps.size[1] - 1);
             for(int i = 0;i<heatmaps.size[1] - 1;i++){
     		    cv::Mat heatMap(heatmaps.size[2], heatmaps.size[3], CV_32F, reinterpret_cast<float*>(const_cast<uchar*>(heatmaps.ptr(0, i))));
@@ -73,7 +73,7 @@ namespace poseEstimation{
                 heatmaps_channels[i]=heatMap;
             }
 
-            cv::Mat pafs = outs[1]; // 1*38*120*120
+            cv::Mat pafs = outs[1]; 
             std::vector<cv::Mat> pafs_channels(pafs.size[1]);
             for(int i = 0;i<pafs.size[1];i++){
     		    cv::Mat paf(heatmaps.size[2], heatmaps.size[3], CV_32F, reinterpret_cast<float*>(const_cast<uchar*>(pafs.ptr(0,i))));
