@@ -54,7 +54,7 @@ namespace poseEstimation{
                 }
             }
             if(draw_track_id && this->track_id != -1)
-                cv::putText(img, std::to_string(this->track_id), cv::Point(this->bbox.x,this->bbox.y),cv::FONT_HERSHEY_PLAIN,5,cv::Scalar(0,0,255),3,8);
+                cv::putText(img, std::to_string(this->track_id), cv::Point(this->bbox.x,this->bbox.y),cv::FONT_HERSHEY_PLAIN,3,cv::Scalar(0,0,255),3,8);
         }
 
     private:
