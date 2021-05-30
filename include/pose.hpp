@@ -54,7 +54,8 @@ namespace poseEstimation{
                 }
             }
             if(draw_track_id && this->track_id != -1)
-                cv::putText(img, std::to_string(this->track_id), cv::Point(this->bbox.x,this->bbox.y),cv::FONT_HERSHEY_PLAIN,3,cv::Scalar(0,0,255),3,8);
+                cv::putText(img, std::to_string(this->track_id), cv::Point(this->bbox.x - 20,this->bbox.y + 30),cv::FONT_HERSHEY_PLAIN,3,cv::Scalar(0,0,255),3,8);
+
         }
 
     private:
@@ -80,7 +81,7 @@ namespace poseEstimation{
 
     class poseTracker{        
     public:
-        void track(std::vector<Pose> &current_poses, int threshold = 3, bool smooth = false){
+        void track(std::vector<Pose> &current_poses, int threshold = 3){
             std::sort(current_poses.begin(), current_poses.end(),
                 [](const Pose& a, const Pose& b){
                     return a.confidence>b.confidence;  
@@ -102,7 +103,7 @@ namespace poseEstimation{
                     mask[best_matched_id] = 0;
                 else
                     best_matched_pose_id = ++this->max_pose_id;
-               current_poses[i].track_id = best_matched_id;
+               current_poses[i].track_id = best_matched_pose_id;
             }
             this->previous_poses = current_poses;
         }
@@ -122,7 +123,7 @@ namespace poseEstimation{
                 if(a.keypoints[kpt_id].x != -1 && b.keypoints[kpt_id].x != -1){
                     double distance = cv::norm(a.keypoints[kpt_id] - b.keypoints[kpt_id]);
                     double area = std::max(a.bbox.area(), b.bbox.area());
-                    double similarity = exp( -distance / (2 * area)* this->vars[kpt_id]);
+                    double similarity = exp( -distance / (2 * area) * poseTracker::vars[kpt_id]);
                     if(similarity > threshold)
                         num_similar_kpt++;
                 }
