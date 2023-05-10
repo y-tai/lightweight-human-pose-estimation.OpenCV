@@ -121,9 +121,10 @@ namespace poseEstimation{
             int num_similar_kpt = 0;
             for(int kpt_id = 0; kpt_id < Pose::num_kpts; kpt_id++){
                 if(a.keypoints[kpt_id].x != -1 && b.keypoints[kpt_id].x != -1){
-                    double distance = cv::norm(a.keypoints[kpt_id] - b.keypoints[kpt_id]);
+                    cv::Point vec = a.keypoints[kpt_id] - b.keypoints[kpt_id];
+                    double distance = vec.ddot(vec);
                     double area = std::max(a.bbox.area(), b.bbox.area());
-                    double similarity = exp( -distance / (2 * area) * poseTracker::vars[kpt_id]);
+                    double similarity = exp( -distance / ((2 * area + 1e-8) * vars[kpt_id]));
                     if(similarity > threshold)
                         num_similar_kpt++;
                 }
