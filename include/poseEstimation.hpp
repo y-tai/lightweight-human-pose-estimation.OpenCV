@@ -286,7 +286,7 @@ namespace poseEstimation{
                             if(pose_entries.at<float>(j,kpt_a_id) == kpts_a[a_idx[i]].idx && pose_entries.at<float>(j,kpt_b_id) == -1)
                                 pose_entries.at<float>(j,kpt_b_id) =  kpts_b[b_idx[i]].idx;
                             else if(pose_entries.at<float>(j,kpt_b_id) == kpts_b[b_idx[i]].idx && pose_entries.at<float>(j,kpt_a_id) == -1)
-                                pose_entries.at<float>(j,kpt_a_id) == kpts_a[a_idx[i]].idx;
+                                pose_entries.at<float>(j,kpt_a_id) = kpts_a[a_idx[i]].idx;
                     continue;
                 }
                 else{
